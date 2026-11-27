@@ -386,20 +386,15 @@
         border-radius: 6px;
       }
     }
-    /* ===== 음성 읽기 버튼 (메인 배너 우측 최상단) ===== */
+    /* ===== 음성 읽기 버튼 (프로필 바로 위 좌측) ===== */
     .main-banner {
       position: relative;
+      margin-bottom: 0;
     }
     .tts-wrap {
-      position: absolute;
-      top: clamp(8px, 2vw, 14px);
-      right: max(clamp(8px, 2vw, 14px), env(safe-area-inset-right));
-      z-index: 5;
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 6px;
-      max-width: calc(100% - 20px);
+      justify-content: flex-start;
+      padding: clamp(10px, 2vw, 14px) 0 clamp(8px, 1.5vw, 12px);
     }
     .tts-btn {
       display: inline-flex;
@@ -440,16 +435,11 @@
       font-size: 1.1em;
     }
 
-    /* 모바일: 배너 문구가 버튼과 겹치지 않도록 아래로 내림 */
-    @media (max-width: 600px) {
-      .main-banner { padding-top: 52px; }
-    }
-
-    /* ===== 방문자 수 (메인 배너 좌측 하단: 오른쪽 점 메뉴와 겹치지 않는 자리) ===== */
+    /* ===== 방문자 수 (메인 배너 우측 상단) ===== */
     .visit-counter {
       position: absolute;
-      left: max(clamp(8px, 2vw, 14px), env(safe-area-inset-left));
-      bottom: clamp(8px, 2vw, 14px);
+      top: clamp(8px, 2vw, 14px);
+      right: max(clamp(8px, 2vw, 14px), env(safe-area-inset-right));
       display: flex;
       gap: 0.7rem;
       padding: 0.4rem 0.9rem;
@@ -471,14 +461,22 @@
       font-weight: 700;
       font-variant-numeric: tabular-nums;
     }
-    /* 모바일: 배너 문구가 위의 음성 버튼, 아래의 방문자 수와 겹치지 않도록 여백 확보 */
+    /* 모바일: 배너 문구가 위의 방문자 수와 겹치지 않도록 여백 확보 */
     @media (max-width: 760px) {
       .main-banner {
-        padding-top: 52px;
         height: auto;
-        min-height: clamp(180px, 46vw, 300px);
-        padding-bottom: 48px;
+        min-height: clamp(160px, 42vw, 300px);
+        padding-top: 48px;
+        padding-bottom: 12px;
       }
+    }
+
+    /* 높이가 낮은 화면(휴대전화 가로): 점 메뉴가 방문자 수를 가리지 않도록 아래로 */
+    @media (max-height: 500px) {
+      .side-nav { top: 62%; }
+    }
+    @media (max-height: 340px) {
+      .side-nav { top: calc(62% + 22px); }
     }
 
     /* 태블릿 이상: 카드 약간 크게 */
@@ -511,12 +509,6 @@
   </nav>
 
   <div class="main-banner">
-  <div class="tts-wrap">
-    <button type="button" id="tts-btn" class="tts-btn" aria-pressed="false" aria-label="홈페이지 내용을 음성으로 읽어주기">
-      <span class="tts-icon" aria-hidden="true">🔊</span>
-      <span class="tts-label">음성으로 듣기</span>
-    </button>
-  </div>
   <p>개관부터 운영까지 다양한 현장을 경험한 사서, 지역주민과 함께하는 도서관을 만들겠습니다.</p>
   <div class="visit-counter">
     <span>오늘 방문자 수: <b id="today-visits">0</b></span>
@@ -525,6 +517,14 @@
   </div>
 
   <main>
+    <!-- 음성 읽기 버튼: 프로필 바로 위 좌측 -->
+    <div class="tts-wrap">
+      <button type="button" id="tts-btn" class="tts-btn" aria-pressed="false" aria-label="홈페이지 내용을 음성으로 읽어주기">
+        <span class="tts-icon" aria-hidden="true">🔊</span>
+        <span class="tts-label">음성으로 듣기</span>
+      </button>
+    </div>
+
     <section id="profile">
       <div class="profile">
         <div class="profile-photo">
