@@ -445,6 +445,42 @@
       .main-banner { padding-top: 52px; }
     }
 
+    /* ===== 방문자 수 (메인 배너 좌측 하단: 오른쪽 점 메뉴와 겹치지 않는 자리) ===== */
+    .visit-counter {
+      position: absolute;
+      left: max(clamp(8px, 2vw, 14px), env(safe-area-inset-left));
+      bottom: clamp(8px, 2vw, 14px);
+      display: flex;
+      gap: 0.7rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #004d40;
+      font-size: clamp(0.75rem, 2.8vw, 0.9rem);
+      font-weight: 500;
+      line-height: 1.4;
+      text-shadow: none;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .visit-counter > span + span {
+      padding-left: 0.7rem;
+      border-left: 1px solid #b2dfdb;
+    }
+    .visit-counter b {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    /* 모바일: 배너 문구가 위의 음성 버튼, 아래의 방문자 수와 겹치지 않도록 여백 확보 */
+    @media (max-width: 760px) {
+      .main-banner {
+        padding-top: 52px;
+        height: auto;
+        min-height: clamp(180px, 46vw, 300px);
+        padding-bottom: 48px;
+      }
+    }
+
     /* 태블릿 이상: 카드 약간 크게 */
     @media (min-width: 900px) {
       .book-card {
@@ -482,6 +518,10 @@
     </button>
   </div>
   <p>개관부터 운영까지 다양한 현장을 경험한 사서, 지역주민과 함께하는 도서관을 만들겠습니다.</p>
+  <div class="visit-counter">
+    <span>오늘 방문자 수: <b id="today-visits">0</b></span>
+    <span>총 방문자 수: <b id="total-visits">0</b></span>
+  </div>
   </div>
 
   <main>
@@ -770,6 +810,24 @@
   </footer>
 
   <script>
+    /* 방문자 수: 이 브라우저의 저장 공간(localStorage)에 기록 */
+    (function () {
+      /* 날짜는 방문한 기기의 시간 기준 (한국에서는 자정에 '오늘'이 새로 시작) */
+      var now = new Date();
+      var todayKey = 'visits_' + now.getFullYear() + '-' +
+        ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2);
+      var totalKey = 'visits_total';
+      var todayCount = 1, totalCount = 1;
+      try {
+        todayCount = Number(localStorage.getItem(todayKey) || 0) + 1;
+        totalCount = Number(localStorage.getItem(totalKey) || 0) + 1;
+        localStorage.setItem(todayKey, todayCount);
+        localStorage.setItem(totalKey, totalCount);
+      } catch (e) { /* 저장이 차단된 환경에서도 나머지 기능은 정상 동작 */ }
+      document.getElementById('today-visits').textContent = todayCount;
+      document.getElementById('total-visits').textContent = totalCount;
+    })();
+
     /* 스크롤 위치에 따라 우측 네비게이션 현재 구간 표시 */
     (function () {
       var links = document.querySelectorAll('.side-nav a');
